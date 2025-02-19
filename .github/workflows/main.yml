@@ -1,0 +1,42 @@
+name: Sync Cloudflare_vless_trojan
+
+on:
+  schedule:
+    - cron: '55 02 * * *'
+  workflow_dispatch:
+
+jobs:
+  clone:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Clone yonggekkk/Cloudflare_vless_trojan repository
+        run: |
+          echo "Cloning yonggekkk/Cloudflare_vless_trojan repository..."
+          git clone https://github.com/yonggekkk/Cloudflare_vless_trojan.git
+          echo "Clone completed."
+
+      - name: Copy files
+        run: |
+          echo "Copying files..."
+          rsync -av --exclude='.git' Cloudflare_vless_trojan/ ./
+          echo "Files copied."
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+          git add .
+          git commit -m "Sync Cloudflare_vless_trojan" || echo "No changes to commit"
+          git push origin HEAD
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Clean up
+        run: |
+          echo "Cleaning up..."
+          rm -rf Cloudflare_vless_trojan
+          echo "Cleanup completed."
