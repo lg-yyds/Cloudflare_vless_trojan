@@ -30,7 +30,7 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
           git add .
-          git commit -m "Sync Cloudflare_vless_trojan" || echo "No changes to commit"
+          git commit -m "Sync" || echo "No changes to commit"
           git push origin HEAD
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
